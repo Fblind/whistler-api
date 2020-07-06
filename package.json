@@ -1,0 +1,23 @@
+{
+  "name": "knowledge-directory",
+  "version": "1.0.0",
+  "description": "Individual knowledge directory",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test nyc --reporter=html mocha -t 50000 --exit",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
+    "puppeteer": "^5.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0"
+  }
+}
