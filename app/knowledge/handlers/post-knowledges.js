@@ -9,9 +9,10 @@ function _formatDocument (entity) {
   return entity
 }
 
-function _handler ({ parserService }) {
+function _handler ({ knowledgeCreate }) {
   return async (req, res) => {
-    const response = await parserService.execute(req.body.url)
+    // TODO: validate body
+    const response = await knowledgeCreate.execute(req.body)
     return res.status(200).json(_formatDocument(response))
   }
 }

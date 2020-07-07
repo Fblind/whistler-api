@@ -12,9 +12,23 @@ const cheerio = require('cheerio')
 const scrapper = require('./app/scrapper/scrapper')({ axios, cheerio })
 const { parserService } = require('./app/parser/feature-services')({ scrapper })
 const postParser = require('./app/parser/handlers/post-parse')({ parserService })
-
 app.post('/parser', postParser.handler)
 
-app.listen(3000, () => {
+// TODO: DB Setup
+const db = { knowledges: [] }
+// TODO: DB Setup repos
+const { KnowledgeRepo } = require('./app/repos')({ db })
+// TODO: initialize in routes ?
+const { knowledgeCreate } = require('./app/knowledge/feature-services')({ KnowledgeRepo })
+const postKnowledges = require('./app/knowledge/handlers/post-knowledges')({ knowledgeCreate })
+app.post('/knowledges', postKnowledges.handler)
+
+const { knowledgeList } = require('./app/knowledge/feature-services')({ KnowledgeRepo })
+const getKnowledges = require('./app/knowledge/handlers/get-knowledges')({ knowledgeList })
+
+app.get('/knowledges', getKnowledges.handler)
+
+
+app.listen(3001, () => {
   console.log('Starting server');
 });

@@ -1,4 +1,3 @@
-// dependencies should be one ?
 module.exports = (dependencies) => {
   return {
     handler: _handler(dependencies)
@@ -9,9 +8,10 @@ function _formatDocument (entity) {
   return entity
 }
 
-function _handler ({ parserService }) {
+function _handler ({ knowledgeList }) {
   return async (req, res) => {
-    const response = await parserService.execute(req.body.url)
+    // TODO: validate body
+    const response = await knowledgeList.execute()
     return res.status(200).json(_formatDocument(response))
   }
 }
