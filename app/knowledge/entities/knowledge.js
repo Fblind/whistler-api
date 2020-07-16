@@ -25,7 +25,7 @@ function _getNotes (literal) {
 
 function _getTags (literal) {
   // TODO: merge
-  return literal.tags
+  return literal.tags || []
 }
 
 function _parse (literal) {
@@ -43,6 +43,7 @@ function _parse (literal) {
 function _create (literal) {
   // TODO: validations
   return Object.freeze({
+    id: literal.id || literal._id,
     title: literal.title,
     url: literal.url,
     imageUrl: literal.imageUrl,

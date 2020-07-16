@@ -25,8 +25,11 @@ function _scrap ({ axios, cheerio }) {
         // name - content
         // property - content
         // PoC get only og tags, each service tendria
-        // const name = $(elem).attr('name')
-        // const content = $(elem).attr('content')
+        const name = $(elem).attr('name')
+        const content = $(elem).attr('content')
+        if (name) {
+          desc[name] = content
+        }
         const ogProperty = $(elem).attr('property')
         const ogContent = $(elem).attr('content')
         if (ogProperty) {
