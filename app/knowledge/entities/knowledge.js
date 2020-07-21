@@ -28,6 +28,10 @@ function _getTags (literal) {
   return literal.tags || []
 }
 
+function _getType (literal) {
+  return literal.type || 'article'
+}
+
 function _parse (literal) {
   // TODO: Parse from a url to a knowledge
   return _create({
@@ -36,7 +40,8 @@ function _parse (literal) {
     imageUrl: _getImageUrl(literal),
     description: _getDescription(literal),
     notes: _getNotes(literal),
-    tags: _getTags(literal)
+    tags: _getTags(literal),
+    type: _getType(literal)
   })
 }
 
@@ -49,6 +54,7 @@ function _create (literal) {
     imageUrl: literal.imageUrl,
     description: literal.description,
     notes: literal.notes,
-    tags: literal.tags
+    tags: literal.tags,
+    type: literal.type || 'article',
   })
 }
