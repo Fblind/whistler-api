@@ -1,38 +1,38 @@
 module.exports = {
   create: _create,
-  parse: _parse
+  parse: _parse,
+};
+
+function _getTitle(literal) {
+  return literal["og:title"] || literal["twitter:title"] || literal["title"];
 }
 
-function _getTitle (literal) {
-  return literal['og:title'] || literal['twitter:title'] || literal['title']
+function _getUrl(literal) {
+  return literal["og:url"];
 }
 
-function _getUrl (literal) {
-  return literal['og:url']
+function _getImageUrl(literal) {
+  return literal["og:image"];
 }
 
-function _getImageUrl (literal) {
-  return literal['og:image']
+function _getDescription(literal) {
+  return literal["og:description"] || literal["description"] || "";
 }
 
-function _getDescription (literal) {
-  return literal['og:description']
+function _getNotes(literal) {
+  return literal.notes;
 }
 
-function _getNotes (literal) {
-  return literal.notes
-}
-
-function _getTags (literal) {
+function _getTags(literal) {
   // TODO: merge
-  return literal.tags || []
+  return literal.tags || [];
 }
 
-function _getType (literal) {
-  return literal.type || 'article'
+function _getType(literal) {
+  return literal.type || "article";
 }
 
-function _parse (literal) {
+function _parse(literal) {
   // TODO: Parse from a url to a knowledge
   return _create({
     title: _getTitle(literal),
@@ -41,13 +41,13 @@ function _parse (literal) {
     description: _getDescription(literal),
     notes: _getNotes(literal),
     tags: _getTags(literal),
-    type: _getType(literal)
-  })
+    type: _getType(literal),
+  });
 }
 
-function _create (literal) {
+function _create(literal) {
   // TODO: validations
-  return Object.freeze({
+  return {
     id: literal.id || literal._id,
     title: literal.title,
     url: literal.url,
@@ -55,6 +55,6 @@ function _create (literal) {
     description: literal.description,
     notes: literal.notes,
     tags: literal.tags,
-    type: literal.type || 'article',
-  })
+    type: literal.type || "article",
+  };
 }
