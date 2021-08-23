@@ -1,9 +1,4 @@
-// 1 scrapping url
-// 2 parser meta tags
-// 3 return a parser object
-
-// modules needed => request, cheerio, pupettear
-// npm install axios cheerio puppeteer --save
+const parser = require("../../parser/feature-services/parser");
 
 module.exports = (dependencies) => {
   return {
@@ -11,24 +6,12 @@ module.exports = (dependencies) => {
   };
 };
 
-// Medium => article
-// dev.to => article
-// youtube => video
-
 function _scrap({ axios, cheerio }) {
-  // axios, cheerio, puppeteer
-  // TODO: wrap axios
-  // TODO: base scrap
   return async (url) => {
-    // url = 'https://fblind.github.io/blog/html-semantic'
     const { data: html } = await axios.get(url);
     const $ = cheerio.load(html);
-    const desc = [];
+    const desc = {};
     const metas = $("meta").each((_, elem) => {
-      // const data = $(elem).attr()
-      // name - content
-      // property - content
-      // PoC get only og tags, each service tendria
       const name = $(elem).attr("name");
       const content = $(elem).attr("content");
       if (name) {
@@ -40,7 +23,6 @@ function _scrap({ axios, cheerio }) {
         desc[ogProperty] = ogContent;
       }
     });
-    console.log("desc: ", desc);
-    return desc;
+    return { ...desc, type: "video" };
   };
 }
