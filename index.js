@@ -8,7 +8,7 @@ function setUpDb(dbClient, cb) {
     if (err) return cb(err, client);
     const dbName = "kdb";
     const db = client.db(dbName);
-    console.log("Connected successfully to db: ", db);
+    console.log("Connected successfully to db");
     return cb(err, db);
   });
 }

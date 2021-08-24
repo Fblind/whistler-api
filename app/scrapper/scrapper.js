@@ -23,7 +23,7 @@ function _scrap({ axios, cheerio }) {
     // url = 'https://fblind.github.io/blog/html-semantic'
     const { data: html } = await axios.get(url);
     const $ = cheerio.load(html);
-    const desc = [];
+    const desc = {};
     const metas = $("meta").each((_, elem) => {
       // const data = $(elem).attr()
       // name - content
@@ -40,7 +40,9 @@ function _scrap({ axios, cheerio }) {
         desc[ogProperty] = ogContent;
       }
     });
-    console.log("desc: ", desc);
+
+    desc["$"] = $;
+
     return desc;
   };
 }

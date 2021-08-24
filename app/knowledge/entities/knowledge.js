@@ -32,6 +32,16 @@ function _getType(literal) {
   return literal.type || "article";
 }
 
+function _getEmbedUrl(literal) {
+  if (literal.type === "audio") return literal.embedUrl;
+  return "";
+}
+
+function _getEmbed(literal) {
+  if (literal.type === "audio") return literal.embed;
+  return "";
+}
+
 function _parse(literal) {
   // TODO: Parse from a url to a knowledge
   return _create({
@@ -42,11 +52,14 @@ function _parse(literal) {
     notes: _getNotes(literal),
     tags: _getTags(literal),
     type: _getType(literal),
+    embedUrl: _getEmbedUrl(literal),
+    embed: _getEmbed(literal),
   });
 }
 
 function _create(literal) {
   // TODO: validations
+  console.log(literal);
   return {
     id: literal.id || literal._id,
     title: literal.title,
@@ -56,5 +69,7 @@ function _create(literal) {
     notes: literal.notes,
     tags: literal.tags,
     type: literal.type || "article",
+    embedUrl: literal.embedUrl,
+    embed: literal.embed,
   };
 }
