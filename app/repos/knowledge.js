@@ -26,7 +26,7 @@ function _save({ db }) {
 
 function _list({ db }) {
   return () => {
-    return db.collection("knowledges").find({}).toArray();
+    return db.collection("knowledges").find({}).sort({_id: -1}).toArray();
     const knowledges = db.knowledges;
     // .map(Knowledge.toEntity)
     return Promise.resolve(knowledges);
