@@ -59,9 +59,7 @@ function _parse(literal) {
 
 function _create(literal) {
   // TODO: validations
-  console.log(literal);
   return {
-    id: literal.id || literal._id,
     title: literal.title,
     url: literal.url,
     imageUrl: literal.imageUrl,

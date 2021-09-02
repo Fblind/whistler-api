@@ -1,13 +1,16 @@
+require("dotenv").config();
+const config = require("./config")(process.env);
 const { MongoClient } = require("mongodb");
-const url = "mongodb://localhost:27017";
 const client = MongoClient;
 
 function setUpDb(dbClient, cb) {
   // Use connect method to connect to the server
-  client.connect(url, function (err, client) {
+  client.connect(config.db.url, function (err, client) {
     if (err) return cb(err, client);
-    const dbName = "kdb";
-    const db = client.db(dbName);
+    const db = client.db(config.db.name, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("Connected successfully to db");
     return cb(err, db);
   });
@@ -80,10 +83,10 @@ setUpDb(client, (err, db) => {
 
   //Healthcheck
   app.get("/healthcheck", (req, res) => {
-    res.json({status: "OK"})
+    res.json({ status: "OK", env: config.env });
   });
 
-  app.listen(3001, () => {
+  app.listen(config.port, () => {
     console.log("Starting server");
   });
 });

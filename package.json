@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test nyc --reporter=html mocha -t 50000 --exit",
-    "start": "node index.js"
+    "start": "node index.js",
+    "start:production": "DOTENV_CONFIG_PATH=.env.production node -r dotenv/config index.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +14,7 @@
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongodb": "^4.1.0",
     "puppeteer": "^5.0.0"
