@@ -78,6 +78,11 @@ setUpDb(client, (err, db) => {
 
   app.get("/knowledges/:id", getKnowledgeById.handler);
 
+  //Healthcheck
+  app.get("/healthcheck", (req, res) => {
+    res.json({status: "OK"})
+  });
+
   app.listen(3001, () => {
     console.log("Starting server");
   });
