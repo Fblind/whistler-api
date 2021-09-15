@@ -6,6 +6,8 @@
   "scripts": {
     "lint": "echo 'lint no setup yet'",
     "test": "NODE_ENV=test nyc --reporter=html mocha -t 50000 --exit",
+    "migrations": "echo 'migrations no setup yet'",
+    "migrations:production": "echo 'migrations no setup yet'",
     "start": "node index.js",
     "start:production": "DOTENV_CONFIG_PATH=.env.production node -r dotenv/config index.js"
   },
