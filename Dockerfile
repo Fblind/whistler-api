@@ -15,11 +15,11 @@ RUN npm install && npm cache clean --force
 # copy all the host's files into the container
 COPY --chown=node:node . .
 # start the image running the following command
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:production"]
 
 
 # How to run:
 # Build the image => docker build -t kdb-image .
-# Run the image => docker run --rm -p 3001:3001 -p 27017:27017 --name kdb-api kdb-image
+# Run the image => docker run -d --rm -p 3001:3001 --name kdb-api kdb-image
 # docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mongo4.4
 

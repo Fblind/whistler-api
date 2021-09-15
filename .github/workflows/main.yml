@@ -1,0 +1,90 @@
+# Name or description of what this workflow is doing
+name: CI/CD (if everything green then deploy master)
+# Action will be trigger when some event (push) happens in the specific branches ([dev])
+on:
+  push:
+    branches: [dev]
+# The pipeline, what will be executed in each branch when the action is trigger
+jobs:
+  # name of the job
+  build:
+    # docker where the job will be executed (can be self hosted)
+    runs-on: ubuntu-18-04
+    # TODO: ver bien que es
+    strategy:
+      matrix:
+        node-version: [12.x]
+    # commands, actions or things that will be executed in order
+    steps:
+      # name or description of the step
+      - name: Checking out dev branch
+      # when using one ecosystem action we need to declare it with uses:
+        uses: actions/checkout@v2
+
+      - name: Using Nodejs ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        # actions can receive "arguments" or "options" using with:
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Installing dependencies
+        run: npm ci
+
+      - name: Running linter
+        run: npm run lint
+
+      - name: Running test
+        run: npm run test
+  # end job execution
+  # start new job definition
+  merge:
+    # this job will only be executed if another job was finish succesfully
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checking out master branch
+      uses: actions/checkout@v2
+      with:
+        ref: master
+
+      - name: Merging dev into master
+      # use pipe to declare multiline commands
+      run: |
+        git pull origin dev --rebase
+        git push origin master
+
+  migrations:
+    needs: merge
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Running migrations
+      run: npm run migrations:production
+  # this job will pull master, build and run the dockerfile
+  deploy:
+    needs: migrations
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Pulling and deploying master
+      uses: appleboy/ssh-action@v0.1.4
+      # first we need to create a new user for this in our server
+      # add the secrets
+      # and associate a ssh keys to the repo
+
+      # Steps to do before
+      # create user (in server)
+      # https://www.digitalocean.com/community/tutorials/how-to-create-a-new-sudo-enabled-user-on-ubuntu-18-04-quickstart-es
+      # add docker permissions (usermod -aG docker github)
+      # create ssh keys for github user (https://docs.github.com/es/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+      with:
+        host: ${{ secrets.DROPLET_HOST }}
+        username: ${{ secrets.DROPLET_USERNAME }}
+        password: ${{ secrets.DROPLET_PASSWORD }}
+        port: ${{ secrets.DROPLET_PORT }}
+        script: |
+          cd ~/whistler-api
+          git pull origin master --rebase
+          docker build -t kdb-image .
+          docker stop kdb-api
+          docker rm kdb-api
+          docker run -d --rm -p 3001:3001 --name kdb-api kdb-image

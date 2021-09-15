@@ -4,12 +4,17 @@
   "description": "Individual knowledge directory",
   "main": "index.js",
   "scripts": {
+    "lint": "echo 'lint no setup yet'",
     "test": "NODE_ENV=test nyc --reporter=html mocha -t 50000 --exit",
     "start": "node index.js",
     "start:production": "DOTENV_CONFIG_PATH=.env.production node -r dotenv/config index.js"
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "12.14.0",
+    "npm": "6.13.4"
+  },
   "dependencies": {
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
