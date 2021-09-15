@@ -58,6 +58,11 @@ jobs:
     needs: merge
     runs-on: ubuntu-18.04
     steps:
+      - name: Checking out master branch
+        uses: actions/checkout@v2
+        with:
+          ref: master
+
       - name: Running migrations
         run: npm run migrations:production
   # this job will pull master, build and run the dockerfile
