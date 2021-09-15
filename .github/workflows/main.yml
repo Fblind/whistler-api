@@ -9,7 +9,7 @@ jobs:
   # name of the job
   build:
     # docker where the job will be executed (can be self hosted)
-    runs-on: ubuntu-18-04
+    runs-on: ubuntu-18.04
     # TODO: ver bien que es
     strategy:
       matrix:
