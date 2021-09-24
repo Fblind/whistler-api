@@ -24,6 +24,7 @@ function _scrap({ axios, cheerio }) {
     const { data: html } = await axios.get(url);
     const $ = cheerio.load(html);
     const desc = {};
+    // eslint-disable-next-line no-unused-vars
     const metas = $("meta").each((_, elem) => {
       // const data = $(elem).attr()
       // name - content

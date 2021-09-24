@@ -8,8 +8,8 @@ module.exports = (dependencies) => {
 
 function _scrap({ axios, cheerio }) {
   return async (url) => {
-    const defaultScrapper = BaseScrapper({axios, cheerio});
+    const defaultScrapper = BaseScrapper({ axios, cheerio });
     const result = await defaultScrapper.scrap(url);
-    return {...result, type: "video"};
+    return { ...result, type: "video" };
   };
 }

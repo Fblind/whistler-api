@@ -29,7 +29,7 @@ function isYoutube(url) {
 function _factory(dependencies) {
   return (urlStringified) => {
     const url = new URL(urlStringified);
-    console.log("HOSTNAME: ", url.hostname)
+    console.log("HOSTNAME: ", url.hostname);
     if (isYoutube(url)) return require("./strategies/youtube")(dependencies);
     if (isSpotify(url)) return require("./strategies/spotify")(dependencies);
     return require("./scrapper")(dependencies);

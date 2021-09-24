@@ -1,6 +1,6 @@
-const parser = require('./parser')
+const parser = require("./parser");
 module.exports = (dependencies) => {
   return {
-    parserService: parser(dependencies)
-  }
-}
+    parserService: parser(dependencies),
+  };
+};

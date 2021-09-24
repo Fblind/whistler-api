@@ -73,11 +73,10 @@ setUpDb(client, (err, db) => {
   const { knowledgeGet } = require("./app/knowledge/feature-services")({
     KnowledgeRepo,
   });
-  const getKnowledgeById = require("./app/knowledge/handlers/get-knowledges-id")(
-    {
+  const getKnowledgeById =
+    require("./app/knowledge/handlers/get-knowledges-id")({
       knowledgeGet,
-    }
-  );
+    });
 
   app.get("/knowledges/:id", getKnowledgeById.handler);
 
