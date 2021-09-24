@@ -11,7 +11,8 @@
     "migrations": "echo 'migrations no setup yet'",
     "migrations:production": "echo 'migrations no setup yet'",
     "start": "node index.js",
-    "start:production": "DOTENV_CONFIG_PATH=.env.production node -r dotenv/config index.js"
+    "start:production": "DOTENV_CONFIG_PATH=.env.production node -r dotenv/config index.js",
+    "prepare": "husky install"
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +21,7 @@
     "npm": "6.13.4"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.4",
     "cheerio": "^1.0.0-rc.3",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -32,8 +33,14 @@
     "chai": "^4.2.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
     "mocha": "^8.0.1",
     "nyc": "^15.1.0",
     "prettier": "2.4.1"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   }
 }
