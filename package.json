@@ -2,6 +2,22 @@
   "name": "knowledge-directory",
   "version": "1.0.0",
   "description": "Individual knowledge directory",
+  "keywords": [
+    "node",
+    "knowledge",
+    "directory",
+    "whistler",
+    "api"
+  ],
+  "homepage": "https://github.com/Fblind/whistler-api#README.md",
+  "bugs": {
+    "url": "https://github.com/Fblind/whistler-api/issues",
+    "email": "hello@fblind.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Fblind/whistler-api.git"
+  },
   "main": "index.js",
   "scripts": {
     "format": "prettier --write .",
@@ -14,7 +30,7 @@
     "start:production": "DOTENV_CONFIG_PATH=.env.production node -r dotenv/config index.js",
     "prepare": "husky install"
   },
-  "author": "Facundo <fblind@gmail.com>, <hello@fblind.dev>",
+  "author": "Facundo <fblind@gmail.com>, <hello@fblind.dev> (https://fblind.github.io/about)",
   "license": "ISC",
   "engines": {
     "node": "12.14.0",
