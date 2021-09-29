@@ -2,6 +2,8 @@ require("dotenv").config();
 const config = require("./config")(process.env);
 const { MongoClient } = require("mongodb");
 const client = MongoClient;
+const { logger } = require("./setup/logger");
+const { httpLogger } = require("./setup/httpLogger");
 
 function setUpDb(dbClient, cb) {
   // Use connect method to connect to the server
@@ -11,7 +13,7 @@ function setUpDb(dbClient, cb) {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Connected successfully to db");
+    logger.info("Connected successfully to db");
     return cb(err, db);
   });
 }
@@ -21,7 +23,7 @@ const app = express();
 
 setUpDb(client, (err, db) => {
   if (err) {
-    console.error(err);
+    logger.error(err);
     client.close();
   }
 
@@ -31,6 +33,9 @@ setUpDb(client, (err, db) => {
   const bodyParser = require("body-parser");
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
+
+  // logger
+  app.use(httpLogger("tiny"));
 
   // TODO: register routes from modules
   const axios = require("axios");
@@ -86,6 +91,6 @@ setUpDb(client, (err, db) => {
   });
 
   app.listen(config.port, () => {
-    console.log("Starting server");
+    logger.info("Starting server");
   });
 });
