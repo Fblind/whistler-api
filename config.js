@@ -13,6 +13,13 @@ function _getDBConfig(env) {
       name: "kdb",
     };
   }
+
+  if (env.NODE_ENV === "test") {
+    return {
+      url: "mongodb://localhost:27017",
+      name: "kdb_test",
+    };
+  }
   return {
     url: "mongodb://localhost:27017",
     name: "kdb",

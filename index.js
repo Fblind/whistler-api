@@ -1,32 +1,13 @@
 require("dotenv").config();
 const config = require("./config")(process.env);
-const { MongoClient } = require("mongodb");
-const client = MongoClient;
 const { logger } = require("./setup/logger");
 const { httpLogger } = require("./setup/httpLogger");
 
-function setUpDb(dbClient, cb) {
-  // Use connect method to connect to the server
-  client.connect(config.db.url, function (err, client) {
-    if (err) return cb(err, client);
-    const db = client.db(config.db.name, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    logger.info("Connected successfully to db");
-    return cb(err, db);
-  });
-}
-
 const express = require("express");
+const DB = require("./local_modules/db");
 const app = express();
 
-setUpDb(client, (err, db) => {
-  if (err) {
-    logger.error(err);
-    client.close();
-  }
-
+function setUpApp(db) {
   // TODO: set up
   const cors = require("cors");
   app.use(cors());
@@ -85,12 +66,51 @@ setUpDb(client, (err, db) => {
 
   app.get("/knowledges/:id", getKnowledgeById.handler);
 
+  const tagsRouter = express.Router("/tags"); // eslint-disable-line new-cap
+  const tagsRouters = require("./app/tags/routes.js");
+  tagsRouters(tagsRouter, { logger, db });
+
+  app.use(tagsRouter);
+
   //Healthcheck
   app.get("/healthcheck", (req, res) => {
     res.json({ status: "OK", env: config.env });
   });
 
+  // eslint-disable-next-line no-unused-vars
+  app.use("/", function defaultErrorHandler(err, req, res, _next) {
+    logger.error(err.message);
+    return res.status(err.status).json({
+      code: err.code,
+      message: err.message,
+    });
+  });
+
   app.listen(config.port, () => {
     logger.info("Starting server");
   });
-});
+}
+
+const _db = new DB(config.db, logger);
+_db
+  .connect()
+  .then((db) => {
+    setUpApp(db);
+  })
+  .catch((err) => {
+    logger.error(err);
+    process.exit(1);
+  });
+
+function logError(err) {
+  try {
+    logger.error("UNCAUGHT EXCEPTION", err);
+  } catch (e) {
+    console.log("UNCAUGHT EXCEPTION:", e, err);
+  }
+}
+
+process.on("unhandledRejection", logError);
+process.on("uncaughtException", logError);
+
+module.exports = app;
