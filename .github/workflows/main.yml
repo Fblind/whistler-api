@@ -21,6 +21,17 @@ jobs:
         # when using one ecosystem action we need to declare it with uses:
         uses: actions/checkout@v2
 
+      - name: Create mongo Docker container
+        id: build_mongo_docker
+        uses: DigiPie/mongo-action@v1.0.1
+        with:
+          image-version: 4.4
+          port: 27017
+
+      - name: Test mongo connection
+        id: test_mongo_connection
+        run: "sudo mongo localhost:27017"
+
       - name: Using Nodejs ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         # actions can receive "arguments" or "options" using with:
