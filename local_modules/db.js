@@ -1,11 +1,17 @@
 const { MongoClient } = require("mongodb");
 
+let instances = {};
+
 class DB {
   constructor(config, logger = console) {
-    this.config = config;
-    this.logger = logger;
-    this.client = MongoClient;
-    this.connections = {};
+    if (!instances[config.url]) {
+      this.config = config;
+      this.logger = logger;
+      this.client = MongoClient;
+      this.connections = {};
+      instances[this.config.url] = this;
+    }
+    return instances[config.url];
   }
 
   getExistingConnection(url) {
