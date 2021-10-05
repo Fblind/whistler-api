@@ -5,6 +5,7 @@ const { httpLogger } = require("./setup/httpLogger");
 
 const express = require("express");
 const DB = require("./local_modules/db");
+const { notFound, errorHandler } = require("./local_modules/middlewares");
 const app = express();
 
 function setUpApp(db) {
@@ -18,73 +19,25 @@ function setUpApp(db) {
   // logger
   app.use(httpLogger("tiny"));
 
-  // TODO: register routes from modules
-  const axios = require("axios");
-  const cheerio = require("cheerio");
-  const scrapperFactory = require("./app/scrapper/factory")({
-    axios,
-    cheerio,
-  });
-  // const scrapper = require('./app/scrapper/scrapper')({ axios, cheerio })
-  const { parserService } = require("./app/parser/feature-services")({
-    scrapperFactory,
-  });
-  const postParser = require("./app/parser/handlers/post-parse")({
-    parserService,
-  });
-  app.post("/parser", postParser.handler);
+  // Parser
+  const parserRouter = require("./app/parser/routes.js");
+  app.use("/parser", parserRouter({ logger, db }));
 
-  // TODO: DB Setup
-  // const db = { knowledges: [] };
-  // TODO: DB Setup repos
-  const { KnowledgeRepo } = require("./app/repos")({ db });
-  // TODO: initialize in routes ?
-  const { knowledgeCreate } = require("./app/knowledge/feature-services")({
-    KnowledgeRepo,
-  });
-  const postKnowledges = require("./app/knowledge/handlers/post-knowledges")({
-    knowledgeCreate,
-  });
-  app.post("/knowledges", postKnowledges.handler);
+  // Knowledges
+  const knowledgesRouter = require("./app/knowledge/routes.js");
+  app.use("/knowledges", knowledgesRouter({ logger, db }));
 
-  const { knowledgeList } = require("./app/knowledge/feature-services")({
-    KnowledgeRepo,
-  });
-  const getKnowledges = require("./app/knowledge/handlers/get-knowledges")({
-    knowledgeList,
-  });
-
-  app.get("/knowledges", getKnowledges.handler);
-
-  const { knowledgeGet } = require("./app/knowledge/feature-services")({
-    KnowledgeRepo,
-  });
-  const getKnowledgeById =
-    require("./app/knowledge/handlers/get-knowledges-id")({
-      knowledgeGet,
-    });
-
-  app.get("/knowledges/:id", getKnowledgeById.handler);
-
-  const tagsRouter = express.Router("/tags"); // eslint-disable-line new-cap
-  const tagsRouters = require("./app/tags/routes.js");
-  tagsRouters(tagsRouter, { logger, db });
-
-  app.use(tagsRouter);
+  // Tags
+  const tagsRouter = require("./app/tags/routes.js");
+  app.use("/tags", tagsRouter({ logger, db }));
 
   //Healthcheck
   app.get("/healthcheck", (req, res) => {
     res.json({ status: "OK", env: config.env });
   });
 
-  // eslint-disable-next-line no-unused-vars
-  app.use("/", function defaultErrorHandler(err, req, res, _next) {
-    logger.error(err.message);
-    return res.status(err.status).json({
-      code: err.code,
-      message: err.message,
-    });
-  });
+  app.use(notFound);
+  app.use(errorHandler(logger));
 
   app.listen(config.port, () => {
     logger.info("Starting server");

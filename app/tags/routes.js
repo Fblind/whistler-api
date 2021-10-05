@@ -1,4 +1,6 @@
-module.exports = function route(router, { logger, db }) {
+const router = require("express").Router();
+
+module.exports = function _router({ logger, db }) {
   const postTags = require("./handlers/post-tags.js");
   const getTags = require("./handlers/get-tags.js");
 
@@ -8,7 +10,7 @@ module.exports = function route(router, { logger, db }) {
   });
 
   router
-    .route("/tags")
+    .route("/")
     .post(postTags({ tagsCreate, logger }).handler)
     .get(getTags({ tagsList, logger }).handler);
 

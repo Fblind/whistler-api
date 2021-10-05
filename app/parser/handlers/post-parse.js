@@ -1,4 +1,3 @@
-// dependencies should be one ?
 module.exports = (dependencies) => {
   return {
     handler: _handler(dependencies),
