@@ -1,4 +1,3 @@
-// const Knowledge = require("../entities/knowledge");
 module.exports = (dependencies) => {
   return {
     execute: _execute(dependencies),

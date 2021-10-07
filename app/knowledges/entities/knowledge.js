@@ -1,6 +1,8 @@
+const { ObjectId } = require("mongodb");
 module.exports = {
   create: _create,
   parse: _parse,
+  getMock: _getMock,
 };
 
 function _getTitle(literal) {
@@ -69,5 +71,25 @@ function _create(literal) {
     type: literal.type || "article",
     embedUrl: literal.embedUrl,
     embed: literal.embed,
+    // createdAt:,
+    // updatedAt:,
+    // createdBy:,
+    // updatedBy:,
   };
+}
+
+function _getMock(chance, overrides = {}) {
+  const literal = {
+    title: chance.sentence(),
+    url: chance.url(),
+    imageUrl: chance.url(),
+    description: chance.paragraph(),
+    notes: chance.paragraph(),
+    tags: [chance.word(), chance.word()],
+    type: chance.pickone(["article", "audio", "video"]),
+    embedUrl: chance.url(),
+    embed: chance.string(),
+  };
+
+  return Object.assign({ ..._create(literal), _id: new ObjectId() }, overrides);
 }

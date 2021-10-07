@@ -7,20 +7,13 @@ const app = require("../../../index.js");
 const Tag = require("../entities/tag.js");
 const repos = require("../../repos/index.js");
 
-const DB = require("../../../local_modules/db.js");
-const config = require("../../../config.js")(process.env);
-
-const db = new DB(config.db);
-
 describe("POST /tags", () => {
   let payload = null;
   let tag = null;
-  let dbConnection = null;
   let TagRepo = null;
 
   before(async () => {
-    dbConnection = await db.connect();
-    TagRepo = repos({ db: dbConnection }).TagRepo;
+    TagRepo = repos({ db: global.dbConnection }).TagRepo;
   });
 
   beforeEach(() => {

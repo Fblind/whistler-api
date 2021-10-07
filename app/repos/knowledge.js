@@ -1,41 +1,12 @@
-const { ObjectId } = require("mongodb");
+const BaseRepo = require("./base.js");
+const collection = "knowledges";
 
-// DB deberia ser tipo un ORM
 module.exports = (dependencies) => {
   return {
-    save: _save(dependencies),
-    list: _list(dependencies),
-    getById: _getById(dependencies),
+    save: BaseRepo(dependencies)(collection).save,
+    list: BaseRepo(dependencies)(collection).list,
+    getById: BaseRepo(dependencies)(collection).getById,
+    removeAll: BaseRepo(dependencies)(collection).removeAll,
+    updateById: BaseRepo(dependencies)(collection).updateById,
   };
 };
-
-function _save({ db }) {
-  return (knowledge) => {
-    return db.collection("knowledges").insertOne(knowledge);
-    // TODO: entity.toPersistance(entityObject) ? here or service ?
-    // const dbKnowledge = { ...knowledge, _id: getId(db.knowledges.length) };
-    // db.knowledges.push(dbKnowledge);
-    // // TODO: entity.toEntity(dbObject) ?
-    // return Promise.resolve(knowledge);
-  };
-}
-
-function _list({ db }) {
-  return () => {
-    return db.collection("knowledges").find({}).sort({ _id: -1 }).toArray();
-    // const knowledges = db.knowledges;
-    // // .map(Knowledge.toEntity)
-    // return Promise.resolve(knowledges);
-  };
-}
-
-function _getById({ db }) {
-  return (id) => {
-    return db.collection("knowledges").findOne({ _id: new ObjectId(id) });
-    // const knowledges = db.knowledges;
-    // const knowledge = knowledges.find(
-    //   (knowledge) => knowledge._id.toString() === id.toString()
-    // );
-    // return Promise.resolve(knowledge);
-  };
-}

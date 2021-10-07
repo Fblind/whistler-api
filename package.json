@@ -20,7 +20,7 @@
   },
   "main": "index.js",
   "config": {
-    "testFiles": "app/**/tests/**/*.js app/**/tests/*.js test"
+    "testFiles": "test/setup.test.js app/**/tests/**/*.js app/**/tests/*.js"
   },
   "scripts": {
     "format": "prettier --write .",

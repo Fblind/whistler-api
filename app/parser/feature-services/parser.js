@@ -1,4 +1,4 @@
-const Knowledge = require("../../knowledge/entities/knowledge");
+const Knowledge = require("../../knowledges/entities/knowledge");
 module.exports = (dependencies) => {
   return {
     execute: _execute(dependencies),

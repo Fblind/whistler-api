@@ -8,6 +8,7 @@ module.exports = (dependencies) => (collection) => {
     getById: _getById(dependencies, collection),
     removeAll: _removeAll(dependencies, collection),
     getOneBy: _getOneBy(dependencies, collection),
+    updateById: _updateById(dependencies, collection),
   };
 };
 
@@ -43,5 +44,22 @@ function _removeAll({ db }, collection) {
 function _getOneBy({ db }, collection) {
   return (criteria) => {
     return db.collection(collection).findOne(criteria);
+  };
+}
+
+function _updateById({ db }, collection) {
+  return (id, data) => {
+    return db
+      .collection(collection)
+      .updateOne(
+        {
+          _id: new ObjectId(id),
+        },
+        { $set: data }
+      )
+      .then((result) => {
+        if (!result.acknowledged || result.modifiedCount === 0) return null;
+        return _getById({ db }, collection)(id);
+      });
   };
 }

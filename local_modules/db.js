@@ -1,4 +1,4 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
 let instances = {};
 
@@ -34,6 +34,10 @@ class DB {
         return resolve(db);
       });
     });
+  }
+
+  isValidObjectId(id) {
+    return ObjectId.isValid(id);
   }
 }
 
